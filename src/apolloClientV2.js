@@ -31,6 +31,23 @@ const cache = new InMemoryCache({
   fragmentMatcher: new IntrospectionFragmentMatcher({
     introspectionQueryResultData: schema,
   }),
+  typePolicies: {
+    User: {
+      keyFields: ['id', 'name'],
+    },
+    Folder: {
+      keyFields: (...args) => {
+        console.log('📢 [apolloClientV2.js:39]', args);
+        return ['id', 'name'];
+      },
+    },
+    Link: {
+      // keyFields: false,
+      fields: {
+        title: (title) => title.toUpperCase(),
+      },
+    },
+  },
 });
 
 const client = new ApolloClient({
